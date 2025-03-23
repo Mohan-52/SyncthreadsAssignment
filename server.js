@@ -3,6 +3,8 @@ const app = express();
 
 const cors = require("cors");
 
+require("dotenv").config();
+
 app.use(express.json());
 app.use(cors());
 
@@ -50,7 +52,7 @@ const authenticateToken = (request, response, next) => {
     return response.status(401).send({ message: "User not loged in" });
   }
 
-  jwt.verify(jwtToken, "MY_TOKEN", async (err, payload) => {
+  jwt.verify(jwtToken, process.env.MY_SECRET_TOKEN, async (err, payload) => {
     if (err) {
       return response.status(401).send({ message: "Invalid JWT token" });
     }
@@ -119,7 +121,10 @@ app.post("/api/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid Password" });
     }
 
-    const jwtToken = jwt.sign({ userId: dbUser.id }, "MY_TOKEN");
+    const jwtToken = jwt.sign(
+      { userId: dbUser.id },
+      process.env.MY_SECRET_TOKEN
+    );
 
     res.status(200).json({ message: "Login Successful", jwtToken });
   } catch (error) {
