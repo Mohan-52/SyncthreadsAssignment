@@ -140,3 +140,9 @@ app.get("/api/map", authenticateToken, (req, res) => {
     message: "Map data retrieved successfully",
   });
 });
+
+app.get("/api/dashboard", authenticateToken, async (req, res) => {
+  const selectQuery = `SELECT * from dashboard;`;
+  const dbResponse = await db.all(selectQuery);
+  res.status(200).send(dbResponse);
+});
