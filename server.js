@@ -142,7 +142,10 @@ app.get("/api/map", authenticateToken, (req, res) => {
 });
 
 app.get("/api/dashboard", authenticateToken, async (req, res) => {
-  const selectQuery = `SELECT * from dashboard;`;
-  const dbResponse = await db.all(selectQuery);
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10;
+  const offset = (page - 1) * limit;
+  const selectQuery = `SELECT * from dashboard LIMIT ? OFFSET ?;`;
+  const dbResponse = await db.all(selectQuery, [limit, offset]);
   res.status(200).send(dbResponse);
 });
