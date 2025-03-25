@@ -149,3 +149,16 @@ app.get("/api/dashboard", authenticateToken, async (req, res) => {
   const dbResponse = await db.all(selectQuery, [limit, offset]);
   res.status(200).send(dbResponse);
 });
+
+app.get("/api/map/:id", authenticateToken, async (req, res) => {
+  const { id } = req.params;
+  const selectQuery = `SELECT name,longitude,latitude FROM dashboard WHERE id=?`;
+
+  try {
+    const dbResponse = await db.get(selectQuery, [id]);
+    res.status(200).send(dbResponse);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Internal Sever Error" });
+  }
+});
