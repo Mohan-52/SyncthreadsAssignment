@@ -135,9 +135,10 @@ app.post("/api/login", async (req, res) => {
 
 app.get("/api/map", authenticateToken, (req, res) => {
   res.json({
-    center: { lat: 20.5937, lng: 78.9629 }, // India's latitude & longitude
-    zoom: 5, // Zoom out level
-    message: "Map data retrieved successfully",
+    latitude: 20.5937,
+    longitude: 78.9629,
+    zoom: 5,
+    name: "India",
   });
 });
 
@@ -156,7 +157,7 @@ app.get("/api/map/:id", authenticateToken, async (req, res) => {
 
   try {
     const dbResponse = await db.get(selectQuery, [id]);
-    res.status(200).send(dbResponse);
+    res.status(200).send({ ...dbResponse, zoom: 5 });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Internal Sever Error" });
