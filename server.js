@@ -134,7 +134,7 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.get("/api/map", authenticateToken, (req, res) => {
-  res.json({
+  res.status(200).send({
     latitude: 20.5937,
     longitude: 78.9629,
     zoom: 5,
@@ -157,7 +157,7 @@ app.get("/api/map/:id", authenticateToken, async (req, res) => {
 
   try {
     const dbResponse = await db.get(selectQuery, [id]);
-    res.status(200).send({ ...dbResponse, zoom: 5 });
+    res.status(200).send({ ...dbResponse, zoom: 11 });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Internal Sever Error" });
